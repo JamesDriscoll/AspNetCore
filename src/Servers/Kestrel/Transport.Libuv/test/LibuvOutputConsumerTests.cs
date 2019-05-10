@@ -576,12 +576,8 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv.Tests
                     Assert.False(task1Waits.IsCanceled);
                     Assert.False(task1Waits.IsFaulted);
 
-                    // A final write guarantees that the error is observed by OutputProducer,
-                    // but doesn't return a canceled/faulted task.
-                    var task4Success = outputProducer.WriteDataAsync(fullBuffer);
-                    Assert.True(task4Success.IsCompleted);
-                    Assert.False(task4Success.IsCanceled);
-                    Assert.False(task4Success.IsFaulted);
+                    // A final write guarantees that the error is observed by OutputProducer.
+                    _ = outputProducer.WriteDataAsync(fullBuffer);
 
                     // Third task is now canceled
                     await Assert.ThrowsAsync<OperationCanceledException>(() => task3Canceled);
